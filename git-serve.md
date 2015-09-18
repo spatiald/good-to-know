@@ -1,5 +1,5 @@
 # Launch a one-off git server from any local repository.
-Source: [](https://gist.github.com/datagrok/5080545)
+Source: https://gist.github.com/datagrok/5080545
 
 I [tweeted this already][1] but I thought it could use some expansion:
 
